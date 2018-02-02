@@ -1,5 +1,3 @@
-const moment = require('moment')
-
 function parseTime(time) {
   const fragments = time.split(':')
   return {
@@ -10,9 +8,7 @@ function parseTime(time) {
 }
 
 function getTimeObject(time) {
-  if (typeof time === 'object' && 'hours' in time && 'minutes' in time && 'seconds' in time) {
-    return time
-  }
+  if (time instanceof Time) return time
   return new Time(time)
 }
 
@@ -72,38 +68,61 @@ class Time {
   }
 }
 
+function printUsage() {
+  console.log('Usage: time-calculator [startTime] [operator] [manipulatorTime]')
+  console.log('\t [startTime]: The time you start your calculation with')
+  console.log('\t [operator]: + or -')
+  console.log('\t [manipulatorTime]: Time you want to add or substract')
+  console.log('Times can be written like: 1, 01, 01:30, 01:30:10. Be careful: 10:3 is not 10:30 but 10:03.')
+  console.log('You can supply multiple [operator] [manipulatorTime] pairs after one another.')
+  console.log('Example usages:')
+  console.log('\t time-calculator 16 - 14:32:10')
+  console.log('\t time-calculator 16 - 14:32:10 + 4 - 0:30:10')
+  console.log('\t time-calculator 16-14:32:10')
+  console.log('\t time-calculator 16-14:32:10+4-0:30:10')
+}
+
+// Remove node and index.js from args
 let args = process.argv.slice(2)
 
-if (args[0].match(/[+-]/)) {
-  args = args[0].split(/([+-])/)
+if (!args.length) return printUsage()
+
+// Support syntax without spaces
+// For example: `time-calculator 16:00-12:30` instead of `time-calculator 16:00 - 12:30`
+const operatorsRegex = /([+-])/
+if (args[0].match(operatorsRegex)) {
+  args = args[0].split(operatorsRegex)
 }
 
 if (args.length < 3) {
   console.error('You must supply at least 3 parameters')
+  return printUsage()
 }
 
 if (!(args.length % 2)) {
   console.error('Number of parameters must be odd')
+  return printUsage()
 }
 
-const startTime = new Time(args[0])
+const time = new Time(args[0])
+// Remove the starting time from the time manipulation operations
 const timeOperations = args.slice(1)
 
 for (let i = 0; i < timeOperations.length; i = i + 2) {
   const operator = timeOperations[i]
-  const time = new Time(timeOperations[i + 1])
+  const manipulatorTime = timeOperations[i + 1]
 
   if (operator === '+') {
-    startTime.add(time)
+    time.add(manipulatorTime)
     continue
   }
 
   if (operator === '-') {
-    startTime.substract(time)
+    time.substract(manipulatorTime)
     continue
   }
 
   return console.error('Unsupported operator')
 }
 
-console.log(startTime.toString())
+console.log(time.toString())
