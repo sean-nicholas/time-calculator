@@ -65,7 +65,7 @@ class Time {
   }
 
   toString() {
-    const hours = this.hours < 10 ? '0' + this.hours : this.hours
+    const hours = (this.hours < 10 && this.hour >= 0) ? '0' + this.hours : this.hours
     const minutes = this.minutes < 10 ? '0' + this.minutes : this.minutes
     const seconds = this.seconds < 10 ? '0' + this.seconds : this.seconds
     return `${hours}:${minutes}:${seconds}`
