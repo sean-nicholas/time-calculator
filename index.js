@@ -72,7 +72,11 @@ class Time {
   }
 }
 
-const args = process.argv.slice(2)
+let args = process.argv.slice(2)
+
+if (args[0].match(/[+-]/)) {
+  args = args[0].split(/([+-])/)
+}
 
 if (args.length < 3) {
   console.error('You must supply at least 3 parameters')
