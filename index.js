@@ -53,7 +53,7 @@ class Time {
     this.manipulateHours(timeObj.hours)
   }
 
-  substract(time) {
+  subtract(time) {
     const timeObj = getTimeObject(time)
     this.manipulateSeconds(-timeObj.seconds)
     this.manipulateMinutes(-timeObj.minutes)
@@ -72,7 +72,7 @@ function printUsage() {
   console.log('Usage: time-calculator [startTime] [operator] [manipulatorTime]')
   console.log('\t [startTime]: The time you start your calculation with')
   console.log('\t [operator]: + or -')
-  console.log('\t [manipulatorTime]: Time you want to add or substract')
+  console.log('\t [manipulatorTime]: Time you want to add or subtract')
   console.log('Times can be written like: 1, 01, 01:30, 01:30:10. Be careful: 10:3 is not 10:30 but 10:03.')
   console.log('You can supply multiple [operator] [manipulatorTime] pairs after one another.')
   console.log('Example usages:')
@@ -118,7 +118,7 @@ for (let i = 0; i < timeOperations.length; i = i + 2) {
   }
 
   if (operator === '-') {
-    time.substract(manipulatorTime)
+    time.subtract(manipulatorTime)
     continue
   }
 
